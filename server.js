@@ -3,6 +3,7 @@ var app = express();
 var request = require('request');
 var config = require('./config');
 var parser = require('./parser');
+var _ = require('underscore');
 
 app.configure(function(){
   app.use(express.static(__dirname + '/public'));
@@ -10,10 +11,22 @@ app.configure(function(){
 
 var vals = [];
 
+// --
 setInterval(function(){
-  parser.getQrkValue(function(price, time){
-    console.log(time,price);
-    vals.push({time:time,price:price});
+  parser.qrkToBtc(function(price, time){
+    var found = _.find(vals, function(val){
+      return val.time == time;
+    })
+    console.log(found)
+    if(!found) {
+      parser.btcToUsd(function(amount){
+        vals.push({ time:time,
+                    qrkToBtc:price,
+                    BtcToUsd:amount
+                  });
+        console.log(vals);
+      })
+    }
   });
 }, config.qrktobtcInterval)
 

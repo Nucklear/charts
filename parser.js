@@ -1,7 +1,7 @@
 var config = require('./config');
 var request = require('request');
 
-var getQrkValue = function(cb){
+var qrkToBtc = function(cb){
   request({url:config.qrktobtcURL, json:true}, function (error, response, body) {
     if(!error && response.statusCode == 200) {
       // Check json validity
@@ -9,13 +9,29 @@ var getQrkValue = function(cb){
         body.return &&
         body.return.markets &&
         body.return.markets.QRK &&
-        body.return.markets.QRK.lasttradeprice )
-      var price = body.return.markets.QRK.lasttradeprice;
-      var timestamp = body.return.markets.QRK.lasttradetime;
-      cb && cb(price, timestamp);
+        body.return.markets.QRK.lasttradeprice ) {
+        
+        var price = body.return.markets.QRK.lasttradeprice;
+        var timestamp = body.return.markets.QRK.lasttradetime;
+        cb && cb(price, timestamp);
+      }
     }
   })
 }
+
+var btcToUsd = function(cb){
+  request({url:config.btctousdUrl, json:true}, function (error, response, body) {
+    if(!error && response.statusCode == 200) {
+      // Check json validity
+      if(body &&
+        body.amount)
+      var amount = body.amount;
+      cb && cb(amount);
+    }
+  })
+}
+
 module.exports = {
-  getQrkValue:getQrkValue
+  qrkToBtc:qrkToBtc,
+  btcToUsd:btcToUsd
 }
