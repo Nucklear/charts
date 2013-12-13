@@ -1,0 +1,21 @@
+{
+  "name": "charts",
+  "version": "0.0.1",
+  "description": "charts ======",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Nucklear/charts.git"
+  },
+  "author": "",
+  "license": "BSD",
+  "readmeFilename": "README.md",
+  "gitHead": "de44f9d1ab16e5f740594ecd97d24547b3035551",
+  "dependencies": {
+    "express": "~3.4.7",
+    "request": "~2.29.0"
+  }
+}
