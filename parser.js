@@ -10,10 +10,15 @@ var qrkToBtc = function(cb){
         body.return.markets &&
         body.return.markets.QRK &&
         body.return.markets.QRK.lasttradeprice ) {
-        
+
         var price = body.return.markets.QRK.lasttradeprice;
         var timestamp = body.return.markets.QRK.lasttradetime;
-        cb && cb(price, timestamp);
+        var volume = body.return.markets.QRK.volume;
+        cb && cb({
+          price:price,
+          timestamp:timestamp,
+          volume:volume
+        });
       }
     }
   })
