@@ -17,10 +17,10 @@ app.configure(function(){
 mongoose.connect(config.db);
 
 // --
-var lastQrk = null;
+var lastQrkTime = null;
 setInterval(function(){
   parser.qrkToBtc(function(data){
-    var found = lastQrk && (lastQrk.time == data.time);
+    var found = lastQrkTime && (lastQrkTime == data.time);
     if(!found) {
       var qrk = new Qrk({
         currency:'BTC',
@@ -29,7 +29,7 @@ setInterval(function(){
         volume:data.volume
       });
       qrk.save(function(){
-        lastQrk = qrk;
+        lastQrk = data.time;
       });
     }
     /*
