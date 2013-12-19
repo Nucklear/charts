@@ -25,7 +25,7 @@ setInterval(function(){
       var qrk = new Qrk({
         currency:'BTC',
         price:data.price,
-        timestamp:data.timestamp,
+        time:new Date(data.timestamp),
         volume:data.volume
       });
       qrk.save(function(){
