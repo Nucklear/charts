@@ -29,7 +29,7 @@ setInterval(function(){
         volume:data.volume
       });
       qrk.save(function(){
-        lastQrk = data.time;
+        lastQrkTime = data.time;
       });
     }
     /*

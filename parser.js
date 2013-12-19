@@ -16,7 +16,7 @@ var qrkToBtc = function(cb){
         var volume = body.return.markets.QRK.volume;
         cb && cb({
           price:price,
-          timestamp:timestamp,
+          time:timestamp,
           volume:volume
         });
       }
