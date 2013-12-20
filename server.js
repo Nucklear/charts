@@ -5,9 +5,15 @@ var config = require('./config');
 var parser = require('./parser');
 var _ = require('underscore');
 var mongoose = require('mongoose');
+var Log = require('log');
 
 // models
 var Qrk = require('./models/qrk');
+var Btc = require('./models/btc');
+
+// Configuration
+
+var log = new Log('info');
 
 app.configure(function(){
   app.use(express.static(__dirname + '/public'));
@@ -17,6 +23,7 @@ app.configure(function(){
 mongoose.connect(config.db);
 
 // --
+/*
 var lastQrkTime = null;
 setInterval(function(){
   parser.qrkToBtc(function(data){
@@ -39,11 +46,32 @@ setInterval(function(){
                     BtcToUsd:amount
                   });
       });
-    }*/
+    }
   });
 }, config.qrktobtcInterval)
+*/
+
+parser.startBtc();
+
+// Helpers
+var modelsToJson = function(models){
+  var data = [];
+  _.each(models, function(model){
+    data.push([model.price, model.time])
+  });
+  return data;
+}
 
 // API
+app.get('/api/btc', function(req, res){
+  Btc.find().exec(function(err, btcs){
+    if(err) {
+      return res.send({},500);
+    }
+    res.send(modelsToJson(btcs));
+  })
+});
+
 app.get('/api/qrk', function(req, res){
   Qrk.find().exec(function(err, qrks){
     if(err) {
@@ -54,3 +82,4 @@ app.get('/api/qrk', function(req, res){
 })
 
 app.listen(config.appPort);
+log.info("Server started on port:"+config.appPort);
