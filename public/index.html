@@ -1,1 +1,137 @@
-HELLO
+<!DOCTYPE html>
+<html>
+	<head>
+
+	<link rel="stylesheet" type="text/css" href="css/bootstrap.css">
+	<style>
+		body{
+			padding-top: 170px;
+		}
+		#plot{
+		width:900px;
+		height:300px;
+		font-size: 10px;
+		font-weight: bold;
+		font-family: Arial;
+		margin-top: 20px;
+		}
+		.navbar-inverse .navbar-inner {
+		    height: 150px;
+		    background-image: none;
+		    background-color: #485a70;
+		}
+		.navbar-inner .brand {
+		    padding-top: 60px;
+		    color:#56a490;
+		    font-size: 40px;
+		    font-weight: bold;
+		    margin-left: auto; 
+		    margin-right: auto;
+		    float:none;
+		    width: 700px;
+		}
+		.navbar-inner .brand img{
+			padding-right: 20px;
+			height: 50px;
+		}
+		.navbar-inner .brand span {
+			color:white;
+			font-size: 40px;
+		}
+		h1{
+			text-align: center;
+			color:#485a70;
+		}
+
+	</style>
+	</head>
+	<body>
+		<div class="container">
+			<div class="navbar navbar-inverse navbar-fixed-top">
+		      <div class="navbar-inner">
+		        
+		          <a class="brand" href="#"><img src='img/logo.png'/>CRYPTOCOINS LIVE <span>CHARTS</span></a>
+		        </div>
+		    </div>
+			<div class='row'>
+				<h1>Bitcoin Chart</h1>
+			</div>
+			<div id="plot"></div>
+			<div class='row'>
+
+			</div>
+		</div>
+		<script type="text/javascript" src="js/flotr2.min.js"></script>
+		<script type="text/javascript" src="http://code.jquery.com/jquery-1.10.2.min.js"></script>
+		<script>
+		(function () {
+			var plot = document.getElementById('plot'), data = [
+				[new Date('Thu, 19 Dec 2013 13:50:22 -0000').getTime(), 655.28 ], 
+				[new Date('Thu, 19 Dec 2013 13:50:25 -0000').getTime(), 660.28 ], 
+				[new Date('Thu, 19 Dec 2013 13:50:50 -0000').getTime(), 670.28 ], 
+				[new Date('Thu, 19 Dec 2013 13:51:00 -0000').getTime(), 655.28 ], 
+				[new Date('Thu, 19 Dec 2013 13:52:00 -0000').getTime(), 625.28 ],
+				[new Date('Thu, 19 Dec 2013 13:53:20 -0000').getTime(), 655.28 ], 
+				[new Date('Thu, 19 Dec 2013 13:54:25 -0000').getTime(), 760.28 ], 
+				[new Date('Thu, 19 Dec 2013 13:55:50 -0000').getTime(), 750.28 ], 
+				[new Date('Thu, 19 Dec 2013 13:56:00 -0000').getTime(), 555.28 ], 
+				[new Date('Thu, 19 Dec 2013 13:57:00 -0000').getTime(), 625.28 ],
+				[new Date('Thu, 19 Dec 2013 13:58:22 -0000').getTime(), 555.28 ], 
+				[new Date('Thu, 19 Dec 2013 13:59:25 -0000').getTime(), 760.28 ], 
+				[new Date('Thu, 19 Dec 2013 14:00:50 -0000').getTime(), 470.28 ], 
+				[new Date('Thu, 19 Dec 2013 14:10:00 -0000').getTime(), 555.28 ], 
+				[new Date('Thu, 19 Dec 2013 14:14:00 -0000').getTime(), 625.28 ],
+				[new Date('Thu, 19 Dec 2013 14:15:22 -0000').getTime(), 855.28 ], 
+				[new Date('Thu, 19 Dec 2013 14:19:25 -0000').getTime(), 860.28 ], 
+				[new Date('Thu, 19 Dec 2013 14:22:50 -0000').getTime(), 870.28 ], 
+				[new Date('Thu, 19 Dec 2013 14:24:00 -0000').getTime(), 855.28 ], 
+				[new Date('Thu, 19 Dec 2013 14:25:00 -0000').getTime(), 325.28 ],
+				[new Date('Thu, 19 Dec 2013 14:26:22 -0000').getTime(), 155.28 ], 
+				[new Date('Thu, 19 Dec 2013 14:27:25 -0000').getTime(), 760.28 ], 
+				[new Date('Thu, 19 Dec 2013 14:41:50 -0000').getTime(), 970.28 ], 
+				[new Date('Thu, 19 Dec 2013 14:50:00 -0000').getTime(), 855.28 ], 
+				[new Date('Thu, 19 Dec 2013 14:59:00 -0000').getTime(), 825.28 ]
+			], graph, offsetx = 8;
+			
+				function animate () {
+				
+				$.ajax({url:"https://api.bitcoinaverage.com/ticker/USD",success:function(result){
+				    data.push([ new Date(result.timestamp).getTime(), parseInt(result.last)]);
+				    console.log(new Date(result.timestamp).getTime());
+				  }});
+
+				graph = Flotr.draw(plot, [ data ], {
+					HtmlText:true,
+					colors: ['#56a490'],
+					fontColor: '#aaa',
+				    yaxis : {
+				    title : '$USD',
+				      max : 1500,
+				      min: 0
+				    },
+				    xaxis : {
+				    	min: null,
+						title : 'Time (UTC/GMT)',
+		                tickDecimals: 2,
+		                noTicks: 20,
+		                mode : 'time',
+		                labelsAngle : 50,
+		                tickFormatter: function(x){
+		                    var x = parseInt(x);
+		                    var myDate = new Date(x);
+		                    var string = myDate.getHours() + ":" + myDate.getMinutes();
+		                    result = string;
+
+		                    return string;}
+				    }, 
+				  });
+				
+				setTimeout(function () {
+					animate();
+				}, 15000);
+				}
+			animate();
+		})();
+		</script>
+	</body>
+</html>
