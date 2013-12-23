@@ -63,13 +63,9 @@ var modelsToJson = function(models){
 }
 
 // API
-app.all('/', function(req, res, next) {
+app.get('/api/btc', function(req, res){
   res.header("Access-Control-Allow-Origin", "*");
   res.header("Access-Control-Allow-Headers", "X-Requested-With");
-  next();
- });
- 
-app.get('/api/btc', function(req, res){
   Btc.find().exec(function(err, btcs){
     if(err) {
       return res.send({},500);
