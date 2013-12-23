@@ -57,7 +57,7 @@ parser.startBtc();
 var modelsToJson = function(models){
   var data = [];
   _.each(models, function(model){
-    data.push([model.price, model.time])
+    data.push([model.price, model.time, model.amount]);
   });
   return data;
 }
