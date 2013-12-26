@@ -6,6 +6,7 @@ var parser = require('./parser');
 var _ = require('underscore');
 var mongoose = require('mongoose');
 var Log = require('log');
+var moment = require('moment');
 
 // models
 var Qrk = require('./models/qrk');
@@ -64,9 +65,14 @@ var modelsToJson = function(models){
 
 // API
 app.get('/api/btc', function(req, res){
+  // Tempo for testing
   res.header("Access-Control-Allow-Origin", "*");
   res.header("Access-Control-Allow-Headers", "X-Requested-With");
-  Btc.find().exec(function(err, btcs){
+  
+  var time = new Date(req.param('time', moment().subtract('days', 6)));
+  log.info(time);
+  
+  Btc.find({time:{$gte: time}}).exec(function(err, btcs){
     if(err) {
       return res.send({},500);
     }
