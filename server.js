@@ -23,6 +23,14 @@ app.configure(function(){
 // mongodb
 mongoose.connect(config.db);
 
+mongoose.on('error', function(err) {
+    log.error('connection error:', err);
+});
+
+mongoose.once('open', function() {
+  log.info('Mongodb connection open');
+});
+
 // --
 /*
 var lastQrkTime = null;
@@ -70,10 +78,11 @@ app.get('/api/btc', function(req, res){
   res.header("Access-Control-Allow-Headers", "X-Requested-With");
   
   var time = new Date(req.param('time', moment().subtract('days', 6)));
-  log.info(time);
-  
+  log.info("Api request with time:", time);
+
   Btc.find({time:{$gte: time}}).exec(function(err, btcs){
     if(err) {
+      log.error("Error on /api/btc", err)
       return res.send({},500);
     }
     res.send(modelsToJson(btcs));
@@ -83,6 +92,7 @@ app.get('/api/btc', function(req, res){
 app.get('/api/qrk', function(req, res){
   Qrk.find().exec(function(err, qrks){
     if(err) {
+      log.error("Error on /api/qrk", err)
       return res.send({},500);
     }
     res.send(qrks);
