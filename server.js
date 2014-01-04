@@ -23,11 +23,12 @@ app.configure(function(){
 // mongodb
 mongoose.connect(config.db);
 
-mongoose.on('error', function(err) {
+var db = mongoose.connection;
+db.on('error', function(err) {
     log.error('connection error:', err);
 });
 
-mongoose.once('open', function() {
+db.once('open', function() {
   log.info('Mongodb connection open');
 });
 
@@ -66,7 +67,7 @@ parser.startBtc();
 var modelsToJson = function(models){
   var data = [];
   _.each(models, function(model){
-    data.push([model.price, model.time, model.amount]);
+    data.push([new Date(model.time).getTime(),model.price]);
   });
   return data;
 }
